@@ -8,8 +8,9 @@
   } from "lucide-svelte";
   import Header from "../../components/Header.svelte";
   import TransferModal from "../../components/TransferModal.svelte";
+  import FacialAuthenticationModal from "../../components/FacialAuthenticationModal.svelte";
 
-  let showAuthModal: boolean = true;
+  let showAuthModal: boolean = false;
   let showTransferModal: boolean = false;
   const OnAuthenticationModal = (): void => {
     showAuthModal = true;
@@ -21,7 +22,7 @@
   const OffTransferModal = (): void => {
     showTransferModal = false;
   };
-  const toggleAuthModal = (): void => {
+  const offAuthModal = (): void => {
     showAuthModal = false;
   };
   const transactions = [
@@ -45,9 +46,13 @@
 </script>
 
 <main class="bg-[#F4F4F9] pb-20 min-h-[100vh]">
-{#if showTransferModal}
-  <TransferModal modal={showTransferModal} OffTransferModal={OffTransferModal} />
-{/if}
+  {#if showTransferModal}
+    <TransferModal modal={showTransferModal} {OffTransferModal} />
+  {/if}
+  {#if showAuthModal}
+    <FacialAuthenticationModal modal={showAuthModal} {offAuthModal} />
+  {/if}
+  <!-- FacialAuthenticationModal -->
   <Header />
   <div
     class="w-full max-w-[1200px] px-4 md:px-8 mx-auto mt-4 min-h-[600px] flex gap-12 flex-col md:items-center justify-center"
@@ -66,6 +71,7 @@
         ><SendIcon height={2} width={2} /> Send Money</button
       >
       <button
+        on:click={OnAuthenticationModal}
         class="px-8 py-3 hover:opacity-40 font-semibold text-base rounded-lg bg-[#fff] border text-dark flex items-center justify-center gap-4"
         ><UserIcon height={2} width={2} /> Request Money</button
       >

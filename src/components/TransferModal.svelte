@@ -26,7 +26,7 @@
           on:click={OffTransferModal}
           class="w-12 h-12 rounded-lg hover:bg-[#fafafa] flex items-center justify-center"
         >
-          <ArrowLeftIcon className="h-5 w-5" />
+          <ArrowLeftIcon class="h-5 w-5" />
         </button>
         Transfer Money
       </h2>
