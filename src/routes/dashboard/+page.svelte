@@ -7,12 +7,20 @@
     UserIcon,
   } from "lucide-svelte";
   import Header from "../../components/Header.svelte";
+  import TransferModal from "../../components/TransferModal.svelte";
 
   let showAuthModal: boolean = true;
+  let showTransferModal: boolean = false;
   const OnAuthenticationModal = (): void => {
     showAuthModal = true;
   };
 
+  const OnTransferModal = (): void => {
+    showTransferModal = true;
+  };
+  const OffTransferModal = (): void => {
+    showTransferModal = false;
+  };
   const toggleAuthModal = (): void => {
     showAuthModal = false;
   };
@@ -37,6 +45,9 @@
 </script>
 
 <main class="bg-[#F4F4F9] pb-20 min-h-[100vh]">
+{#if showTransferModal}
+  <TransferModal modal={showTransferModal} OffTransferModal={OffTransferModal} />
+{/if}
   <Header />
   <div
     class="w-full max-w-[1200px] px-4 md:px-8 mx-auto mt-4 min-h-[600px] flex gap-12 flex-col md:items-center justify-center"
@@ -50,6 +61,7 @@
 
     <div class="flex w-full items-center justify-center gap-8">
       <button
+        on:click={OnTransferModal}
         class="px-8 py-3 hover:opacity-40 font-semibold text-base rounded-lg bg-[#00BFA6] text-white flex items-center justify-center gap-4"
         ><SendIcon height={2} width={2} /> Send Money</button
       >
