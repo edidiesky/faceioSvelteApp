@@ -16,7 +16,7 @@
   class="bg-[#1818183a] fixed top-0 left-0 z-40 min-h-[100vh] w-full flex items-center justify-center"
 >
   <div
-    class="w-full p-6 bg-white md:w-[560px] shadow rounded-xl flex flex-col gap-8"
+    class="w-[95%] p-6 bg-white md:w-[560px] shadow rounded-xl flex flex-col gap-8"
     transition:fly={{ y: 200, duration: 600 }}
     style="opacity: {modal ? 1 : 0}"
   >
@@ -57,7 +57,7 @@
         class="px-8 py-3 w-full hover:opacity-40 font-semibold text-sm rounded-lg bg-[#00BFA6] text-white flex items-center justify-center gap-4"
       >
         <SendIcon width={2} height={2} />
-        Login
+        Send Money
       </button>
     </div>
   </div>
