@@ -21,19 +21,10 @@
   let y = spring(0, { stiffness: 0.1, damping: 0.15 });
 
   let recipient = "";
-  let amount = 0;
-  onMount(() => {
-    const storedTransactions = localStorage.getItem("transactions");
-    if (storedTransactions) {
-      transactions = JSON.parse(storedTransactions);
-    }
-  });
+  let amount = "";
+
   // Handle form submission
   function addTransaction() {
-    if (!recipient || amount <= 0) {
-      alert("Please enter a valid recipient and amount.");
-      return;
-    }
     const newTransaction = {
       id: Date.now(), // Unique ID based on current timestamp
       type: "transfer",
@@ -51,7 +42,7 @@
 
     // Clear input fields
     recipient = "";
-    amount = 0;
+    amount = "";
   }
 </script>
 
@@ -88,6 +79,8 @@
           class="w-full h-12 px-4 border text-sm"
           bind:value={recipient}
         />
+        placeholder="Enter Recipient's email or username" class="w-full h-12 px-4
+        border text-sm" />
       </label>
       <label for="" class="text-sm font-normal flex flex-col gap-2">
         Amount
@@ -102,8 +95,6 @@
     </div>
     <div class="flex w-full md:items-center md:justify-center">
       <button
-        on:click={addTransaction}
-        disabled={amount === 0 || recipient === ""}
         class="px-8 py-3 w-full hover:opacity-40 font-semibold text-sm rounded-lg bg-[#00BFA6] text-white flex items-center justify-center gap-4"
       >
         <SendIcon width={2} height={2} />

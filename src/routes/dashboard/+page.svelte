@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import {
     ArrowUpIcon,
     EyeIcon,
@@ -25,31 +26,59 @@
   const offAuthModal = (): void => {
     showAuthModal = false;
   };
-  const transactions = [
-    {
-      id: 1,
-      type: "received",
-      amount: 500,
-      from: "John Doe",
-      date: "2023-05-15",
-    },
-    { id: 2, type: "sent", amount: 200, to: "Jane Smith", date: "2023-05-14" },
-    {
-      id: 3,
-      type: "received",
-      amount: 1000,
-      from: "Company Inc.",
-      date: "2023-05-13",
-    },
-    { id: 4, type: "sent", amount: 50, to: "Coffee Shop", date: "2023-05-12" },
-  ];
+  let amount: number = 0;
+  // let transactions: {
+  //   type: string;
+  //   id: number;
+  //   amount: number;
+  //   from?: string;
+  //   to?: string;
+  //   date: string;
+  // }[] = [
+  //   // {
+  //   //   id: 1,
+  //   //   type: "received",
+  //   //   amount: 500,
+  //   //   from: "John Doe",
+  //   //   date: "2023-05-15",
+  //   // },
+  //   // { id: 2, type: "sent", amount: 200, to: "Jane Smith", date: "2023-05-14" },
+  //   // {
+  //   //   id: 3,
+  //   //   type: "received",
+  //   //   amount: 1000,
+  //   //   from: "Company Inc.",
+  //   //   date: "2023-05-13",
+  //   // },
+  //   // { id: 4, type: "sent", amount: 50, to: "Coffee Shop", date: "2023-05-12" },
+  // ];
+  let transactions: {
+    type: string;
+    id: number;
+    amount: number;
+    from?: string;
+    to?: string;
+    date: string;
+  }[] = [];
+
+  // Load transactions from localStorage on mount
+  onMount(() => {
+    const storedTransactions = localStorage.getItem("transactions");
+    if (storedTransactions) {
+      transactions = JSON.parse(storedTransactions);
+    }
+  });
 </script>
 
 {#if data.session}
   <!-- Render child routes when session is available -->
   <main class="bg-[#F4F4F9] pb-20 min-h-[100vh]">
     {#if showTransferModal}
-      <TransferModal modal={showTransferModal} {OffTransferModal} />
+      <TransferModal
+        {transactions}
+        modal={showTransferModal}
+        {OffTransferModal}
+      />
     {/if}
     {#if showAuthModal}
       <FacialAuthenticationModal modal={showAuthModal} {offAuthModal} />
@@ -63,7 +92,7 @@
         class="w-full flex flex-col gap-8 p-8 rounded-lg bg-[#1A2E5A] text-white"
       >
         <h3 class="text-lg font-semibold md:text-2xl">Account Balance</h3>
-        <h2 class="text-2xl font-semibold md:text-4xl">$2,500.00</h2>
+        <h2 class="text-2xl font-semibold md:text-4xl">${amount}</h2>
       </div>
 
       <div class="flex w-full items-center justify-center gap-8">
@@ -81,8 +110,14 @@
       <div
         class="w-full flex flex-col gap-8 p-8 rounded-lg bg-[#fff] shadow text-dark"
       >
-        <h2 class="text-xl font-semibold md:text-2xl">Recent Transactions</h2>
-        <div class="card-content">
+        <h2 class="text-xl font-semibold md:text-2xl">
+          {#if transactions?.length !== 0}
+            Recent Transactions
+          {:else}
+            No Transactions
+          {/if}
+        </h2>
+        {#if transactions?.length !== 0}
           <ul class="space-y-4">
             {#each transactions as transaction (transaction.id)}
               <li class="flex items-center justify-between">
@@ -113,7 +148,7 @@
               </li>
             {/each}
           </ul>
-        </div>
+        {/if}
       </div>
     </div>
   </main>
