@@ -1,10 +1,19 @@
 <script>
   import "../app.css";
+  import { page } from "$app/stores";
+  // This will call the sign-in route that is provided by SvelteKitAuth
+  async function loginWithGoogle() {
+    window.location.href = "/auth/signin";
+  }
+
+  function HandleNavigateToDahboard() {
+    window.location.href = "/dashboard";
+  }
 </script>
 
-<main class="bg-[#F4F4F9] min-h-[100vh]">
+<main class="bg-[#F4F4F9] min-h-[100vh] flex items-center justify-center">
   <!-- Header -->
-  <div class="h-[70px] flex items-center w-full bg-[#fff] shadow">
+  <div class="h-[70px] fixed top-0 flex items-center w-full bg-[#fff] shadow">
     <div
       class="w-full max-w-[1200px] px-8 mx-auto flex items-center justify-between"
     >
@@ -32,11 +41,21 @@
       </span>
     </h2>
     <div class="flex md:items-center md:justify-center">
-      <button
-        class="px-8 py-3 hover:opacity-40 font-semibold text-lg rounded-lg bg-[#00BFA6] text-white flex items-center justify-center gap-4"
-      >
-        Sign Up Now
-      </button>
+      {#if $page.data.session}
+         <button
+          on:click={HandleNavigateToDahboard}
+          class="px-8 py-3 hover:opacity-40 font-semibold text-lg rounded-lg bg-[#00BFA6] text-white flex items-center justify-center gap-4"
+        >
+          Go to Dashboard
+        </button>
+      {:else}
+        <button
+          on:click={loginWithGoogle}
+          class="px-8 py-3 hover:opacity-40 font-semibold text-lg rounded-lg bg-[#00BFA6] text-white flex items-center justify-center gap-4"
+        >
+          Sign Up Now
+        </button>
+      {/if}
     </div>
   </div>
 </main>

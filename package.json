@@ -10,6 +10,8 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
 	},
 	"devDependencies": {
+		"@auth/core": "^0.37.2",
+		"@auth/sveltekit": "^1.7.2",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
@@ -23,6 +25,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@faceio/fiojs": "^1.1.0",
 		"lucide-svelte": "^0.453.0",
 		"svelte-motion": "^0.12.2"
 	}
