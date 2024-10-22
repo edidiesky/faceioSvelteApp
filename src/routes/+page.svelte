@@ -25,6 +25,15 @@
         <li class="text-base">Features</li>
         <li class="text-base">Pricing</li>
         <li class="text-base">About</li>
+        <li class="flex items-center gap-4">
+          {#if $page.data.session?.user}
+            <div
+              class="w-12 h-12 rounded-full flex text-base font-semibold text-white bg-[#000] items-center justify-center"
+            >
+              {$page.data.session?.user?.name?.split("")[0]}
+            </div>
+          {/if}
+        </li>
       </ol>
     </div>
   </div>
@@ -42,7 +51,7 @@
     </h2>
     <div class="flex md:items-center md:justify-center">
       {#if $page.data.session}
-         <button
+        <button
           on:click={HandleNavigateToDahboard}
           class="px-8 py-3 hover:opacity-40 font-semibold text-lg rounded-lg bg-[#00BFA6] text-white flex items-center justify-center gap-4"
         >
