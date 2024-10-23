@@ -1,5 +1,7 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import faceIO from "@faceio/fiojs";
+  import { PUBLIC_FACEIO_PUBLIC_ID } from "$env/static/public";
   import {
     ArrowUpIcon,
     EyeIcon,
@@ -7,6 +9,7 @@
     SendIcon,
     UserIcon,
   } from "lucide-svelte";
+
   import Header from "../../components/Header.svelte";
   import TransferModal from "../../components/TransferModal.svelte";
   import FacialAuthenticationModal from "../../components/FacialAuthenticationModal.svelte";
@@ -26,7 +29,7 @@
   const offAuthModal = (): void => {
     showAuthModal = false;
   };
-  let amount: number = 0;
+  let amount: number = 1000;
   // let transactions: {
   //   type: string;
   //   id: number;
@@ -35,13 +38,13 @@
   //   to?: string;
   //   date: string;
   // }[] = [
-  //   // {
-  //   //   id: 1,
-  //   //   type: "received",
-  //   //   amount: 500,
-  //   //   from: "John Doe",
-  //   //   date: "2023-05-15",
-  //   // },
+  // {
+  //   id: 1,
+  //   type: "received",
+  //   amount: 500,
+  //   from: "John Doe",
+  //   date: "2023-05-15",
+  // },
   //   // { id: 2, type: "sent", amount: 200, to: "Jane Smith", date: "2023-05-14" },
   //   // {
   //   //   id: 3,
@@ -52,6 +55,7 @@
   //   // },
   //   // { id: 4, type: "sent", amount: 50, to: "Coffee Shop", date: "2023-05-12" },
   // ];
+
   let transactions: {
     type: string;
     id: number;
@@ -68,6 +72,32 @@
       transactions = JSON.parse(storedTransactions);
     }
   });
+
+  // FACEIO LOGICS
+
+  let faceio: { enroll: (arg0: { locale: string; token: any; }) => any; }
+
+  // Run only in the browser
+  onMount(() => {
+    console.log(PUBLIC_FACEIO_PUBLIC_ID);
+
+    // Initialize faceIO inside onMount to avoid SSR issues
+    faceio = new faceIO(PUBLIC_FACEIO_PUBLIC_ID);
+
+    // Any other faceIO-related logic can be added here
+  });
+    const authenticateNewUser = async () => {
+    try {
+      const userInfo = await faceio.enroll({
+        locale: "auto",
+        token: PUBLIC_FACEIO_PUBLIC_ID
+      });
+
+      console.log(userInfo);
+    } catch (error) {
+      console.error("Enrollment failed:", error);
+    }
+  };
 </script>
 
 {#if data.session}
@@ -89,13 +119,18 @@
       class="w-full max-w-[1200px] px-4 md:px-8 mx-auto mt-4 min-h-[600px] flex gap-12 flex-col md:items-center justify-center"
     >
       <div
-        class="w-full flex flex-col gap-8 p-8 rounded-lg bg-[#1A2E5A] text-white"
+        class="w-full flex flex-col gap-8 items-start p-8 rounded-lg bg-[#1A2E5A] text-white"
       >
-        <h3 class="text-lg font-semibold md:text-2xl">Account Balance</h3>
-        <h2 class="text-2xl font-semibold md:text-4xl">${amount}</h2>
+        <h3 class="text-xl font-semibold md:text-2xl">Account Balance</h3>
+        <!-- <h2 class="text-2xl font-semibold md:text-4xl">${amount}</h2> -->
+        <button
+          on:click={OnAuthenticationModal}
+          class="px-8 py-3 hover:opacity-40 font-semibold text-sm md:text-base rounded-lg bg-[#00BFA6] text-white flex items-center justify-center gap-4"
+          ><EyeIcon size={20} />View Balance</button
+        >
       </div>
 
-      <div class="flex w-full items-center justify-center gap-8">
+      <!-- <div class="flex w-full items-center justify-center gap-8">
         <button
           on:click={OnTransferModal}
           class="px-8 py-3 hover:opacity-40 font-semibold text-base rounded-lg bg-[#00BFA6] text-white flex items-center justify-center gap-4"
@@ -105,6 +140,23 @@
           on:click={OnAuthenticationModal}
           class="px-8 py-3 hover:opacity-40 font-semibold text-base rounded-lg bg-[#fff] border text-dark flex items-center justify-center gap-4"
           ><UserIcon height={2} width={2} /> Request Money</button
+        >
+      </div> -->
+      <div
+        class="w-full flex flex-col gap-6 p-8 rounded-lg items-start bg-[#fff] shadow text-dark"
+      >
+        <h2 class="text-xl font-semibold md:text-2xl">
+          Swift Transfer with Milzbank
+          <span class="text-base block pt-3 max-w-[450px] font-normal">
+            Send money across borders instantly with our cutting-edge currency
+            exchange platform.
+          </span>
+        </h2>
+
+        <button
+          on:click={OnTransferModal}
+          class="px-8 py-3 hover:opacity-40 font-semibold text-base rounded-lg bg-[#00BFA6] text-white flex items-center justify-center gap-4"
+          ><SendIcon font-size={"12px"} size={20} /> Start Swift Transfer</button
         >
       </div>
       <div
