@@ -6,6 +6,7 @@
   // Modal state (passed from the parent)
   export let modal;
   export let offAuthModal;
+  export let authenticateNewUser;
 
   // Motion
   let y = spring(0, { stiffness: 0.1, damping: 0.15 });
@@ -47,6 +48,7 @@
     </div>
     <div class="flex w-full md:items-center md:justify-center">
       <button
+        on:click={authenticateNewUser}
         class="px-8 py-3 w-full hover:opacity-40 font-semibold text-sm md:text-base rounded-lg bg-[#00BFA6] text-white flex items-center justify-center gap-4"
       >
         Start Facial Scan

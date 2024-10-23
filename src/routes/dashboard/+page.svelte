@@ -75,7 +75,13 @@
 
   // FACEIO LOGICS
 
-  let faceio: { enroll: (arg0: { locale: string; token: any; }) => any; }
+  let faceio: {
+    enroll: (arg0: {
+      locale: string;
+      token: any;
+      payload: { email: string | null | undefined };
+    }) => any;
+  };
 
   // Run only in the browser
   onMount(() => {
@@ -86,11 +92,17 @@
 
     // Any other faceIO-related logic can be added here
   });
-    const authenticateNewUser = async () => {
+  const authenticateNewUser = async () => {
     try {
       const userInfo = await faceio.enroll({
         locale: "auto",
-        token: PUBLIC_FACEIO_PUBLIC_ID
+        token: "fioaf212",
+
+        // locale: "auto",
+        // token: PUBLIC_FACEIO_PUBLIC_ID,
+        payload: {
+          email: data?.session?.user?.email,
+        },
       });
 
       console.log(userInfo);
@@ -111,7 +123,11 @@
       />
     {/if}
     {#if showAuthModal}
-      <FacialAuthenticationModal modal={showAuthModal} {offAuthModal} />
+      <FacialAuthenticationModal
+        {authenticateNewUser}
+        modal={showAuthModal}
+        {offAuthModal}
+      />
     {/if}
     <!-- FacialAuthenticationModal -->
     <Header />
